@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYSTEM FAILURE // CHAOS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #050505;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 满屏随机乱码背景 */
+        .glitch-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.12;
+            font-size: 14px;
+            line-height: 1.1;
+            word-wrap: break-word;
+            z-index: 1;
+            pointer-events: none;
+            text-align: justify;
+        }
+
+        /* 中间文字容器 */
+        .center-wrap {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 故障文字本体 */
+        .glitch-text {
+            font-size: 8rem;
+            font-weight: 900;
+            letter-spacing: 15px;
+            color: #fff;
+            position: relative;
+            /* 红蓝错位重影 */
+            text-shadow: 
+                4px 0 0 rgba(255, 0, 0, 0.8),
+                -4px 0 0 rgba(0, 255, 255, 0.8);
+            animation: text-shake 0.2s infinite;
+        }
+
+        /* 遮挡黑块 */
+        .blocker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 3.5rem;
+            background-color: #050505;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #111;
+            box-shadow: 0 0 20px #000;
+        }
+
+        /* 遮挡块里滑动的红色报错代码 */
+        .blocker::before {
+            content: "CRITICAL_ERROR_0x7F4A >> OVERRIDE_ATTEMPT >> ACCESS_DENIED >> MEMORY_CORRUPTION >> ";
+            color: #ff003c;
+            font-size: 1rem;
+            white-space: nowrap;
+            animation: slide-error 4s linear infinite;
+        }
+
+        /* 全屏扫描线 */
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.4) 50%,
+                rgba(0,0,0,0.4)
+            );
+            background-size: 100% 6px;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        /* 屏幕闪屏闪烁效果 */
+        .flicker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            z-index: 40;
+            pointer-events: none;
+            animation: flash 5s infinite;
+        }
+
+        /* 动画区 */
+        @keyframes text-shake {
+            0% { transform: translate(0, 0) skewX(0deg); }
+            20% { transform: translate(-3px, 2px) skewX(4deg); }
+            40% { transform: translate(3px, -1px) skewX(-4deg); }
+            60% { transform: translate(-2px, -2px) skewX(2deg); }
+            80% { transform: translate(2px, 2px) skewX(-2deg); }
+            100% { transform: translate(0, 0) skewX(0deg); }
+        }
+
+        @keyframes slide-error {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        @keyframes flash {
+            0%, 95% { opacity: 0; }
+            96%, 98% { opacity: 1; }
+            97%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 随机乱码 -->
+    <div class="glitch-bg" id="bg"></div>
+
+    <!-- 文字与遮挡区 -->
+    <div class="center-wrap">
+        <div class="glitch-text">ハテ</div>
+        <div class="blocker"></div>
+    </div>
+
+    <!-- 扫描线 -->
+    <div class="scanlines"></div>
+    <div class="flicker"></div>
+
+    <script>
+        // 生成满屏乱码
+        const bg = document.getElementById('bg');
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*ハテシステムエラー故障混沌";
+        let text = "";
+        for (let i = 0; i < 4000; i++) {
+            text += chars[Math.floor(Math.random() * chars.length)];
+            if (i % 70 === 0) text += "<br>";
+        }
+        bg.innerHTML = text;
+    </script>
+</body>
+</html>
